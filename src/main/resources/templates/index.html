@@ -1,11 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" xml:ns="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <h1>My Recipes!!!</h1>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Source</th>
+            <th>Description</th>
+            <th>Ingredients</th>
+            <th>Instructions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="recipe : ${recipes}">
+            <td th:each="category : ${recipe.categories}">
+                <p th:text="${category.description}">Category name</p>
+            </td>
+            <td th:text="${recipe.source}">Source</td>
+            <td th:text="${recipe.description}">description</td>
+            <td>
+                <ul>
+                    <li th:each="ingredient : ${recipe.ingredients}">
+                        <span th:text="${ingredient.amount}">1</span>
+                        <span th:text="${ingredient.uom}? ${ingredient.uom.unit}">tablespoon</span>
+                        <span th:text="${ingredient.description}">salt</span>
 
+                    </li>
+                </ul>
+            </td>
+            <td th:text="${recipe.directions}">
+                instructions
+            </td>
+        </tr>
+    </tbody>
+</table>
 </body>
 </html>

@@ -14,9 +14,10 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
+    @Lob
     private String directions;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredents;
+    private Set<Ingredient> ingredients;
     @Lob
     private Byte[] image;
     @Enumerated(value = EnumType.STRING)
@@ -127,11 +128,11 @@ public class Recipe {
         this.notes = notes;
     }
 
-    public Set<Ingredient> getIngredents() {
-        return ingredents;
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
     }
 
-    public void setIngredents(Set<Ingredient> ingredents) {
-        this.ingredents = ingredents;
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

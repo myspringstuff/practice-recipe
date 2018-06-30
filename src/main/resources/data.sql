@@ -4,4 +4,5 @@ INSERT INTO category (description) VALUES ('French');
 INSERT INTO category (description) VALUES ('Italian');
 INSERT INTO unit_of_measure (unit) VALUES ('teaspoon');
 INSERT INTO unit_of_measure (unit) VALUES ('tablespoon');
-INSERT INTO unit_of_measure (unit) VALUES ('bowl');
+INSERT INTO unit_of_measure (unit) VALUES ('cup');
+INSERT INTO unit_of_measure (unit) VALUES ('pint');
