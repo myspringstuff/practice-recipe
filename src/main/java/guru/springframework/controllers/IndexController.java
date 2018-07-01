@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Controller
 public class IndexController {
-    private RecipeService recipeService;
+    private final RecipeService recipeService;
 
     public IndexController(RecipeService recipeService) {
         this.recipeService = recipeService;

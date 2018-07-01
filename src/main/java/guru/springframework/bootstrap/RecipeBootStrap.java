@@ -1,4 +1,4 @@
-package guru.springframework.devtools;
+package guru.springframework.bootstrap;
 
 import guru.springframework.domain.*;
 import guru.springframework.repositories.CategoryRepository;
@@ -9,17 +9,15 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
-public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
+public class RecipeBootStrap implements ApplicationListener<ContextRefreshedEvent> {
 
-    private CategoryRepository categoryRepository;
-    private RecipeRepository recipeRepository;
-    private UnitOfMeasureRepository unitOfMeasureRepository;
+    private final CategoryRepository categoryRepository;
+    private final RecipeRepository recipeRepository;
+    private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-    public BootStrap(CategoryRepository categoryRepository, RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+    public RecipeBootStrap(CategoryRepository categoryRepository, RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
         this.categoryRepository = categoryRepository;
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
@@ -58,32 +56,23 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
                 "\n" +
                 "5 Assemble the tacos: Slice the chicken into strips. On each tortilla, place a small handful of arugula. Top with chicken slices, sliced avocado, radishes, tomatoes, and onion slices. Drizzle with the thinned sour cream. Serve with lime wedges.");
 
-        Set<Ingredient> ingredients = new HashSet<>();
-
-        recipe.setIngredients(ingredients);
-
-        Set<Category> categories = new HashSet<>();
-        categories.add(new Category("Grill"));
-        categoryRepository.saveAll(categories);
-        recipe.setCategories(categories);
+        Category american = categoryRepository.findByDescription("American").get();
+        recipe.getCategories().add(american);
 
         recipeRepository.save(recipe);
     }
 
 
     private void createGuacamole() {
-        Category sauce = new Category();
-        sauce.setDescription("Sauce");
-        Set<Category> categories = new HashSet<>();
-        categories.add(sauce);
-        categoryRepository.save(sauce);
 
         Recipe recipe = new Recipe();
         recipe.setDescription("How to Make Perfect Guacamole");
         recipe.setPrepTime(10);
+        recipe.setCookTime(0);
         recipe.setServings(2);
         recipe.setSource("Simple Recipes");
         recipe.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
+
 
         String directions = "1 Cut avocado, remove flesh: Cut the avocados in half. Remove seed. Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon. (See How to Cut and Peel an Avocado.) Place in a bowl.\n" +
                 "\n" +
@@ -101,55 +90,33 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
         recipe.setDirections(directions);
 
         //ingredients
-        Set<Ingredient> ingredients = new HashSet<>();
-        Ingredient avocado = new Ingredient();
-        avocado.setAmount(BigDecimal.valueOf(2));
-        avocado.setDescription("ripe avocados");
-//        avocado.setRecipe(recipe);
-        ingredients.add(avocado);
-
-        Ingredient salt = new Ingredient(BigDecimal.valueOf(0.5), findUom("teaspoon"), "Kosher salt");
-        ingredients.add(salt);
-
-        Ingredient juice = new Ingredient(BigDecimal.ONE, findUom("tablespoon"), "of fresh lime juice or lemon juice");
-        ingredients.add(juice);
-
-        Ingredient onion = new Ingredient(BigDecimal.valueOf(2), findUom("tablespoon"), "to 1/4 cup of minced red onion or thinly sliced green onion");
-        ingredients.add(onion);
-
-        Ingredient chiles = new Ingredient(BigDecimal.ONE, null, "-2 serrano chiles, stems and seeds removed, minced");
-        ingredients.add(chiles);
-
-        Ingredient cilantro = new Ingredient(BigDecimal.valueOf(2), findUom("tablespoon"), "cilantro (leaves and tender stems), finely chopped");
-        ingredients.add(cilantro);
-
-        Ingredient pepper = new Ingredient(BigDecimal.ONE, null, "dash of freshly grated black pepper");
-        ingredients.add(pepper);
-
-        Ingredient tomato = new Ingredient(BigDecimal.valueOf(0.5), null, "ripe tomato, seeds and pulp removed, chopped");
-        ingredients.add(tomato);
-        ingredients.forEach(ingredient -> ingredient.setRecipe(recipe));
-
-        recipe.setIngredients(ingredients);
+        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(2), null, "ripe avocados"));
+        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(0.5), findUom("teaspoon"), "Kosher salt"));
+        recipe.getIngredients().add(new Ingredient(BigDecimal.ONE, findUom("tablespoon"), "of fresh lime juice or lemon juice"));
+        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(2), findUom("tablespoon"), "to 1/4 cup of minced red onion or thinly sliced green onion"));
+        recipe.getIngredients().add(new Ingredient(BigDecimal.ONE, null, "-2 serrano chiles, stems and seeds removed, minced"));
+        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(2), findUom("tablespoon"), "cilantro (leaves and tender stems), finely chopped"));
+        recipe.getIngredients().add(new Ingredient(BigDecimal.ONE, null, "dash of freshly grated black pepper"));
+        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(0.5), null, "ripe tomato, seeds and pulp removed, chopped"));
+        recipe.getIngredients().forEach(ingredient -> ingredient.setRecipe(recipe));
 
         recipe.setDifficulty(Difficulty.MODERATE);
 
-        Notes notes = new Notes();
-        notes.setRecipeNotes("Variations\n" +
+        recipe.setNotes(new Notes(recipe,"Guacamole, a dip made from avocados, is originally from Mexico. The name is derived from two Aztec Nahuatl words—ahuacatl (avocado) and molli (sauce).\n" +
                 "\n" +
-                "For a very quick guacamole just take a 1/4 cup of salsa and mix it in with your mashed avocados.\n" +
+                "EASY PEASY GUACAMOLE\n" +
+                "Guacamole is so easy. All you really need to make guacamole is ripe avocados and salt. After that, a little lime or lemon juice—a splash of acidity— will help to balance the richness of the avocado. Then if you want, add chopped cilantro, chiles, onion, and/or tomato.\n" +
                 "\n" +
-                "Feel free to experiment! One classic Mexican guacamole has pomegranate seeds and chunks of peaches in it (a Diana Kennedy favorite). Try guacamole with added pineapple, mango, or strawberries (see our Strawberry Guacamole).\n" +
+                "Once you have basic guacamole down, you may experiment with variations including strawberries, pineapple, mangoes, even watermelon. You can get creative with homemade guacamole!\n" +
                 "\n" +
-                "The simplest version of guacamole is just mashed avocados with salt. Don't let the lack of availability of other ingredients stop you from making guacamole.\n" +
+                "GUACAMOLE TIP: USE RIPE AVOCADOS\n" +
+                "The trick to making perfect guacamole is using good, ripe avocados.\n" +
                 "\n" +
-                "To extend a limited supply of avocados, add either sour cream or cottage cheese to your guacamole dip. Purists may be horrified, but so what? It tastes great.\n" +
-                "\n" +
-                "For a deviled egg version with guacamole, try our Guacamole Deviled Eggs!\n" +
-                "\n");
-        recipe.setNotes(notes);
+                "Check for ripeness by gently pressing the outside of the avocado. If there is no give, the avocado is not ripe yet and will not taste good. If there is a little give, the avocado is ripe. If there is a lot of give, the avocado may be past ripe and not good. In this case, taste test first before using."
+            ));
 
-        recipe.setCategories(categories);
+        Category american = categoryRepository.findByDescription("American").get();
+        recipe.getCategories().add(american);
 
         recipeRepository.save(recipe);
     }
