@@ -38,10 +38,17 @@ public class Recipe {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+        if (categories == null) {
+            this.categories = new HashSet<>();
+        }
+    }
+
+    public Recipe addCategory(Category category) {
+        this.categories.add(category);
+        return this;
     }
 
     public Difficulty getDifficulty() {
-
         return difficulty;
     }
 
@@ -127,6 +134,9 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+        if (notes != null) {
+            notes.setRecipe(this);
+        }
     }
 
     public Set<Ingredient> getIngredients() {
@@ -135,5 +145,16 @@ public class Recipe {
 
     public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
+        if (ingredients == null) {
+            this.ingredients = new HashSet<>();
+        }
+    }
+
+    public Recipe addIngredient(Ingredient ingredient) {
+        this.ingredients.add(ingredient);
+        if (ingredient != null) {
+            ingredient.setRecipe(this);
+        }
+        return this;
     }
 }

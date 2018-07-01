@@ -40,6 +40,7 @@ public class RecipeBootStrap implements ApplicationListener<ContextRefreshedEven
         recipe.setPrepTime(20);
         recipe.setCookTime(15);
         recipe.setServings(4);
+        recipe.setDifficulty(Difficulty.EASY);
         recipe.setSource("Simple Recipes");
         recipe.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
         recipe.setDirections("1 Prepare a gas or charcoal grill for medium-high, direct heat.\n" +
@@ -57,7 +58,7 @@ public class RecipeBootStrap implements ApplicationListener<ContextRefreshedEven
                 "5 Assemble the tacos: Slice the chicken into strips. On each tortilla, place a small handful of arugula. Top with chicken slices, sliced avocado, radishes, tomatoes, and onion slices. Drizzle with the thinned sour cream. Serve with lime wedges.");
 
         Category american = categoryRepository.findByDescription("American").get();
-        recipe.getCategories().add(american);
+        recipe.addCategory(american);
 
         recipeRepository.save(recipe);
     }
@@ -90,19 +91,18 @@ public class RecipeBootStrap implements ApplicationListener<ContextRefreshedEven
         recipe.setDirections(directions);
 
         //ingredients
-        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(2), null, "ripe avocados"));
-        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(0.5), findUom("teaspoon"), "Kosher salt"));
-        recipe.getIngredients().add(new Ingredient(BigDecimal.ONE, findUom("tablespoon"), "of fresh lime juice or lemon juice"));
-        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(2), findUom("tablespoon"), "to 1/4 cup of minced red onion or thinly sliced green onion"));
-        recipe.getIngredients().add(new Ingredient(BigDecimal.ONE, null, "-2 serrano chiles, stems and seeds removed, minced"));
-        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(2), findUom("tablespoon"), "cilantro (leaves and tender stems), finely chopped"));
-        recipe.getIngredients().add(new Ingredient(BigDecimal.ONE, null, "dash of freshly grated black pepper"));
-        recipe.getIngredients().add(new Ingredient(BigDecimal.valueOf(0.5), null, "ripe tomato, seeds and pulp removed, chopped"));
-        recipe.getIngredients().forEach(ingredient -> ingredient.setRecipe(recipe));
+        recipe.addIngredient(new Ingredient(BigDecimal.valueOf(2), null, "ripe avocados"));
+        recipe.addIngredient(new Ingredient(BigDecimal.valueOf(0.5), findUom("teaspoon"), "Kosher salt"));
+        recipe.addIngredient(new Ingredient(BigDecimal.ONE, findUom("tablespoon"), "of fresh lime juice or lemon juice"));
+        recipe.addIngredient(new Ingredient(BigDecimal.valueOf(2), findUom("tablespoon"), "to 1/4 cup of minced red onion or thinly sliced green onion"));
+        recipe.addIngredient(new Ingredient(BigDecimal.ONE, null, "-2 serrano chiles, stems and seeds removed, minced"));
+        recipe.addIngredient(new Ingredient(BigDecimal.valueOf(2), findUom("tablespoon"), "cilantro (leaves and tender stems), finely chopped"));
+        recipe.addIngredient(new Ingredient(BigDecimal.ONE, null, "dash of freshly grated black pepper"));
+        recipe.addIngredient(new Ingredient(BigDecimal.valueOf(0.5), null, "ripe tomato, seeds and pulp removed, chopped"));
 
         recipe.setDifficulty(Difficulty.MODERATE);
 
-        recipe.setNotes(new Notes(recipe,"Guacamole, a dip made from avocados, is originally from Mexico. The name is derived from two Aztec Nahuatl words—ahuacatl (avocado) and molli (sauce).\n" +
+        recipe.setNotes(new Notes("Guacamole, a dip made from avocados, is originally from Mexico. The name is derived from two Aztec Nahuatl words—ahuacatl (avocado) and molli (sauce).\n" +
                 "\n" +
                 "EASY PEASY GUACAMOLE\n" +
                 "Guacamole is so easy. All you really need to make guacamole is ripe avocados and salt. After that, a little lime or lemon juice—a splash of acidity— will help to balance the richness of the avocado. Then if you want, add chopped cilantro, chiles, onion, and/or tomato.\n" +
