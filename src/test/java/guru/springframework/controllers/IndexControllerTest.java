@@ -15,6 +15,8 @@ public class IndexControllerTest {
     private IndexController indexController;
     @Mock
     private RecipeService recipeService;
+    @Mock
+    private Model model;
 
     @Before
     public void setUp() throws Exception {
@@ -26,10 +28,8 @@ public class IndexControllerTest {
     @Test
     public void getIndexPage() {
 
-        Model model = Mockito.mock(Model.class);
-
         assertEquals("index", indexController.getIndexPage(model));
-        verify(model, times(1)).addAttribute("recipes", recipeService.getRecipes());
-//        verify(indexController, times(1)).getIndexPage(model);
+        verify(recipeService, times(1)).getRecipes();
+        verify(model, times(1)).addAttribute(eq("recipes"), anyIterable());
     }
 }
