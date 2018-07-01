@@ -4,12 +4,14 @@ import guru.springframework.domain.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-
+@Slf4j
 @Component
 public class RecipeBootStrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -24,7 +26,9 @@ public class RecipeBootStrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        log.debug("Loading Spring Bootstrap data...");
         createGuacamole();
         createChickenTaco();
     }
@@ -143,6 +147,7 @@ public class RecipeBootStrap implements ApplicationListener<ContextRefreshedEven
             ));
 
         Category american = categoryRepository.findByDescription("American").get();
+        log.debug("Loaded category: {}", american);
         recipe.getCategories().add(american);
 
         recipeRepository.save(recipe);
