@@ -3,41 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </head>
 <body>
-<h1>My Recipes!!!</h1>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Category</th>
-            <th>Source</th>
-            <th>Description</th>
-            <th>Ingredients</th>
-            <th>Instructions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="recipe : ${recipes}">
-            <td th:each="category : ${recipe.categories}">
-                <p th:text="${category.description}">Category name</p>
-            </td>
-            <td th:text="${recipe.source}">Source</td>
-            <td th:text="${recipe.description}">description</td>
-            <td>
-                <ul>
-                    <li th:each="ingredient : ${recipe.ingredients}">
-                        <span th:text="${ingredient.amount}">1</span>
-                        <span th:text="${ingredient.uom}? ${ingredient.uom.unit}">tablespoon</span>
-                        <span th:text="${ingredient.description}">salt</span>
+<section class="container-fluid">
 
-                    </li>
-                </ul>
-            </td>
-            <td th:text="${recipe.directions}">
-                instructions
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <section class="card">
+            <section class="card-header bg-primary">
+
+                <h1 class="card-title">My Recipes!!!</h1>
+            </section>
+        <section class="card-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Source</th>
+                    <th>Description</th>
+                    <th>Ingredients</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="recipe : ${recipes}">
+                    <td th:text="${recipe.id}">ID</td>
+                    <td th:each="category : ${recipe.categories}">
+                        <p th:text="${category.description}">Category name</p>
+                    </td>
+                    <td th:text="${recipe.source}">Source</td>
+                    <td th:text="${recipe.description}">description</td>
+                    <td>
+                        <ul>
+                            <li th:each="ingredient : ${recipe.ingredients}">
+                                <span th:text="${ingredient.amount}">1</span>
+                                <span th:text="${ingredient.uom}? ${ingredient.uom.unit}">tablespoon</span>
+                                <span th:text="${ingredient.description}">salt</span>
+
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </section>
+</section>
+
 </body>
 </html>
